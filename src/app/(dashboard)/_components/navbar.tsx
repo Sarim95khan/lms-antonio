@@ -3,7 +3,7 @@ import MobileSidebar from './mobile-sidebar';
 
 const Navbar = () => {
   return (
-    <div className="flex flex-row items-center justify-between shadow-sm h-full p-4 ml-auto">
+    <div className="flex flex-row items-center justify-between shadow-sm h-full p-4 ml-auto bg-white">
       <MobileSidebar />
       <NavbarRoutes />
     </div>
