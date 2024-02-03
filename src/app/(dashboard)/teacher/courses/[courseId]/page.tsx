@@ -1,11 +1,18 @@
 import { IconBadge } from '@/components/providers/badge-provider';
 import { db } from '@/lib/db';
 import { auth } from '@clerk/nextjs';
-import { LayoutDashboard } from 'lucide-react';
+import {
+  CircleDollarSign,
+  DollarSign,
+  LayoutDashboard,
+  ListChecks,
+} from 'lucide-react';
 import { redirect } from 'next/navigation';
 import TitleForm from './_components/title-form';
 import DescriptionForm from './_components/description-form';
 import ImageForm from './_components/image-form';
+import { Label } from '@radix-ui/react-label';
+import PriceForm from './_components/price-form';
 
 const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
   const { userId } = auth();
@@ -19,10 +26,17 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
 
   if (!course) redirect('/');
 
+  const categories = await db.category.findMany({
+    orderBy: {
+      name: 'asc',
+    },
+  });
+
   const requiredFields = [
     course.title,
     course.description,
     course.imageUrl,
+    course.categoryId,
     course.price,
   ];
   const totalFields = requiredFields.length;
@@ -49,6 +63,20 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
           <TitleForm initialData={course} courseId={course.id} />
           <DescriptionForm initialData={course} courseId={course.id} />
           <ImageForm initialData={course} courseId={course.id} />
+        </div>
+        <div className="space-y-6">
+          <div>
+            <div className="flex items-center gap-x-2">
+              <IconBadge icon={ListChecks} variant="default" />
+              <h2>Course Chapter</h2>
+            </div>
+            <div>ToDO: chapter</div>
+          </div>
+          <div className="flex items-center gap-x-2">
+            <IconBadge icon={CircleDollarSign} />
+            <h2 className="text-xl">Sell your course</h2>
+          </div>
+          <PriceForm initialData={course} courseId={course.id} />
         </div>
       </div>
     </div>
